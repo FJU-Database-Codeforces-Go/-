@@ -51,7 +51,7 @@ class _HomePageState extends State<HomePage> {
             mini: true,
             child: Icon(Icons.airplanemode_active),
             onPressed: () {
-              Navigator.pushNamed(context, '/topic');
+              Navigator.pushNamed(context, '/TopicDetail');
           },
         )));
 
