@@ -1,10 +1,11 @@
 import 'dart:io';
-
-import 'package:flutter/foundation.dart';
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_app/json_table.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
-import 'package:search_widget/search_widget.dart';
 import 'package:unicorndial/unicorndial.dart';
+import 'package:http/http.dart' as http;
 
 void enablePlatformOverrideForDesktop() {
   if (!kIsWeb && (Platform.isMacOS || Platform.isWindows || Platform.isLinux)) {
@@ -18,14 +19,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
-  List<LeaderBoard> list = <LeaderBoard>[
-    LeaderBoard("Flutter", 54),
-    LeaderBoard("React", 22.5),
-    LeaderBoard("Ionic", 24.7),
-    LeaderBoard("Xamarin", 22.1),
-  ];
-  LeaderBoard _selectedItem;
+  var _textController = new TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -46,12 +40,12 @@ class _HomePageState extends State<HomePage> {
 
     childButtons.add(UnicornButton(
         currentButton: FloatingActionButton(
-            heroTag: "airplane",
-            backgroundColor: Colors.greenAccent,
-            mini: true,
-            child: Icon(Icons.airplanemode_active),
-            onPressed: () {
-              Navigator.pushNamed(context, '/TopicDetail');
+          heroTag: "airplane",
+          backgroundColor: Colors.greenAccent,
+          mini: true,
+          child: Icon(Icons.airplanemode_active),
+          onPressed: () {
+            Navigator.pushNamed(context, '/TopicDetail');
           },
         )));
 
@@ -66,88 +60,61 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: const Text("Search Widget"),
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(vertical: 16),
-        child: Column(
-          children: <Widget>[
-            const SizedBox(
-              height: 16,
+      body: new ListView(
+        children: <Widget>[
+          new ListTile(
+            title: new TextField(
+              controller: _textController,
             ),
-            SearchWidget<LeaderBoard>(
-              dataList: list,
-              hideSearchBoxWhenItemSelected: false,
-              listContainerHeight: MediaQuery.of(context).size.height / 4,
-              queryBuilder: (query, list) {
-                return list
-                    .where((item) => item.username
-                    .toLowerCase()
-                    .contains(query.toLowerCase()))
-                    .toList();
-              },
-              popupListItemBuilder: (item) {
-                return PopupListItemWidget(item);
-              },
-              selectedItemBuilder: (selectedItem, deleteSelectedItem) {
-                return SelectedItemWidget(selectedItem, deleteSelectedItem);
-              },
-              // widget customization
-              noItemsFoundWidget: NoItemsFound(),
-              textFieldBuilder: (controller, focusNode) {
-                return MyTextField(controller, focusNode);
-              },
-              onItemSelected: (item) {
-                setState(() {
-                  _selectedItem = item;
-                });
-              },
-            ),
-            const SizedBox(
-              height: 32,
-            ),
-            Text(
-              "${_selectedItem != null ? _selectedItem.username : ""
-                  "No item selected"}",
-            ),
-            const SizedBox(
-              height: 30,
-            ),
-            Container(
-              padding: EdgeInsets.symmetric(vertical:10.0,horizontal:20),
-              color: Colors.lightBlueAccent[100],
-              child:Text(
-                'Current or upcoming contests',
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize:20,
-                  ),
+          ),
+          new ListTile(
+            title: new RaisedButton(
+                child: new Text('Next'),
+                onPressed: () {
+                  var route = new MaterialPageRoute(
+                    builder: (BuildContext context) =>
+                    new MyStatefulWidget(value: _textController.text),
+                  );
+                  Navigator.of(context).push(route);
+                }),
+          ),
+          new Container(
+            padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20),
+            color: Colors.lightBlueAccent[100],
+            child: Text(
+              'Current or upcoming contests',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 20,
               ),
             ),
-
-            Container(
-              padding: EdgeInsets.symmetric(vertical:40.0,horizontal:10),
-              color: Colors.yellowAccent[100],
-              child:Column(
-                children:[
+          ),
+          Container(
+            padding: EdgeInsets.symmetric(vertical: 40.0, horizontal: 10),
+            color: Colors.yellowAccent[100],
+            child: Column(
+                children: [
                   Text(
-                  'Codeforces Round #605 (Div. 3)',
+                    'Codeforces Round #605 (Div. 3)',
                     style: TextStyle(
-                      fontSize:15,
+                      fontSize: 15,
                     ),
                   ),
                   const SizedBox(
                     height: 5,
                   ),
-                Text(
-                  'Technocup 2020 - Elimination Round 4',
-                  style: TextStyle(
-                    fontSize:15,
+                  Text(
+                    'Technocup 2020 - Elimination Round 4',
+                    style: TextStyle(
+                      fontSize: 15,
+                    ),
                   ),
-                ),
                 ]
-              ),
             ),
-          ],
-        ),
+          ),
+
+        ],
+
       ),
       floatingActionButton: UnicornDialer(
           parentButtonBackground: Colors.redAccent,
@@ -156,147 +123,176 @@ class _HomePageState extends State<HomePage> {
           childButtons: childButtons),
     );
   }
+  Future<String> getData(String url) async {
+    var response = await http.get(
+        Uri.encodeFull('http://140.136.148.222:8000/api/search/?content=$url'),
+        headers: {
+          "Accept": "application/json"
+        }
+    );
+    return response.body;
+  }
 }
-
-class LeaderBoard {
-  LeaderBoard(this.username, this.score);
-
-  final String username;
-  final double score;
-}
-
-class SelectedItemWidget extends StatelessWidget {
-  const SelectedItemWidget(this.selectedItem, this.deleteSelectedItem);
-
-  final LeaderBoard selectedItem;
-  final VoidCallback deleteSelectedItem;
+class MyStatefulWidget extends StatefulWidget {
+  final String value;
+  MyStatefulWidget({Key key,@required this.value}) : super(key: key);
 
   @override
+  _MyStatefulWidgetState createState() => _MyStatefulWidgetState();
+}
+
+class _MyStatefulWidgetState extends State<MyStatefulWidget> {
+
+  Future<String> getData(String url) async {
+    var response = await http.get(
+        Uri.encodeFull('http://140.136.148.222:8000/api/search/?content=$url'),
+        headers: {
+          "Accept": "application/json"
+        }
+    );
+    return response.body;
+  }
+  String data;
+  setData() async {
+    data = await getData(widget.value);    //getData()延迟执行后赋值给data
+  }
+
+  //Future future;
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(
-        vertical: 2,
-        horizontal: 4,
-      ),
-      child: Row(
-        children: <Widget>[
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.only(
-                left: 16,
-                right: 16,
-                top: 8,
-                bottom: 8,
-              ),
-              child: Text(
-                selectedItem.username,
-                style: const TextStyle(fontSize: 14),
+    bool toggle = true;
+    setData();
+    return FutureBuilder<String>(
+      future: getData(widget.value), // a previously-obtained Future<String> or null
+      builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+        List<Widget> children;
+        if (snapshot.hasData) {
+          //setData();
+          var json = jsonDecode(data);
+          return Scaffold(
+            body: Container(
+              padding: EdgeInsets.all(16.0),
+              child: toggle
+                  ? Column(
+                children: [
+                  JsonTable(
+                    json,
+                    showColumnToggle: true,
+                    tableHeaderBuilder: (String header) {
+                      return Container(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 8.0, vertical: 4.0),
+                        decoration: BoxDecoration(
+                            border: Border.all(width: 0.5),
+                            color: Colors.grey[300]),
+                        child: Text(
+                          header,
+                          textAlign: TextAlign.center,
+                          style: Theme.of(context).textTheme.display1.copyWith(
+                              fontWeight: FontWeight.w700,
+                              fontSize: 14.0,
+                              color: Colors.black87),
+                        ),
+                      );
+                    },
+                    tableCellBuilder: (value) {
+                      return Container(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 4.0, vertical: 2.0),
+                        decoration: BoxDecoration(
+                            border: Border.all(
+                                width: 0.5,
+                                color: Colors.grey.withOpacity(0.5))),
+                        child: Text(
+                          value,
+                          textAlign: TextAlign.center,
+                          style: Theme.of(context).textTheme.display1.copyWith(
+                              fontSize: 14.0, color: Colors.grey[900]),
+                        ),
+                      );
+                    },
+                    allowRowHighlight: true,
+                    rowHighlightColor: Colors.yellow[500].withOpacity(0.7),
+                    paginationRowCount: 4,
+                  ),
+                  SizedBox(
+                    height: 40.0,
+                  ),
+                ],
+              )
+                  : Center(
+                child: Text(getPrettyJSONString(data)),
+
               ),
             ),
-          ),
-          IconButton(
-            icon: Icon(Icons.delete_outline, size: 22),
-            color: Colors.grey[700],
-            onPressed: deleteSelectedItem,
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class MyTextField extends StatelessWidget {
-  const MyTextField(this.controller, this.focusNode);
-
-  final TextEditingController controller;
-  final FocusNode focusNode;
-
-  @override
-  Widget build(BuildContext context) {
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-      child: TextField(
-        controller: controller,
-        focusNode: focusNode,
-        style: TextStyle(fontSize: 16, color: Colors.grey[600]),
-        decoration: InputDecoration(
-          enabledBorder: const OutlineInputBorder(
-            borderSide: BorderSide(
-              color: Color(0x4437474F),
+          );
+        } else if (snapshot.hasError) {
+          children = <Widget>[
+            Icon(
+              Icons.error_outline,
+              color: Colors.red,
+              size: 60,
             ),
+            Padding(
+              padding: const EdgeInsets.only(top: 16),
+              child: Text('Error: ${snapshot.error}'),
+
+            )
+          ];
+        } else {
+          children = <Widget>[
+            SizedBox(
+              child: CircularProgressIndicator(),
+              width: 60,
+              height: 60,
+            ),
+            const Padding(
+              padding: EdgeInsets.only(top: 16),
+              child: Text('Awaiting result...'),
+            )
+          ];
+        }
+        return Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: children,
           ),
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Theme.of(context).primaryColor),
-          ),
-          suffixIcon: Icon(Icons.search),
-          border: InputBorder.none,
-          hintText: "Search here...",
-          contentPadding: const EdgeInsets.only(
-            left: 16,
-            right: 20,
-            top: 14,
-            bottom: 14,
-          ),
-        ),
-      ),
+        );
+      },
     );
   }
+
+  String getPrettyJSONString(jsonObject) {
+    JsonEncoder encoder = new JsonEncoder.withIndent('  ');
+    String jsonString = encoder.convert(json.decode(jsonObject));
+    return jsonString;
+  }
+}
+/*
+class TopicDetail extends StatefulWidget {
+  final String value;
+
+  TopicDetail({Key key, @required this.value}) : super(key: key);
+
+  @override
+  _TopicDetail createState() => _TopicDetail();
 }
 
-class NoItemsFound extends StatelessWidget {
+class _TopicDetail extends State<TopicDetail> {
+
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        Icon(
-          Icons.folder_open,
-          size: 24,
-          color: Colors.blue[900].withOpacity(0.7),
-        ),
-        const SizedBox(width: 10),
-        Text(
-          "No Items Found",
-          style: TextStyle(
-            fontSize: 16,
-            color: Colors.grey[900].withOpacity(0.7),
-          ),
-        ),
-      ],
-    );
+    String url = widget.value;
+    bool toggle = true;
+    return new Scaffold(
+      body: buildFutureBuilder(),
+    )
   }
+
+
 }
+*/
 
-class PopupListItemWidget extends StatelessWidget {
-  const PopupListItemWidget(this.item);
 
-  final LeaderBoard item;
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(12),
-      child: Text(
-        item.username,
-        style: const TextStyle(fontSize: 16),
 
-      ),
-    );
-  }
-}
-class ComingContest extends StatelessWidget{
-  @override
-  Widget build(BuildContext context){
-    return SafeArea(
-      //padding: const EdgeInsets.all(20),
-      child: Text(
-        'Coming contest',
-        style: const TextStyle(
-        fontSize: 16,
-            color: Colors.blue,
-        ),
-      ),
-    );
-  }
-}
