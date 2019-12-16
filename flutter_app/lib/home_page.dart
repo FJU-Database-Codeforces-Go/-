@@ -5,6 +5,7 @@ import 'package:flutter_app/json_table.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:unicorndial/unicorndial.dart';
+import 'package:flutter_app/Bar graph.dart';
 import 'package:http/http.dart' as http;
 
 void enablePlatformOverrideForDesktop() {
@@ -12,6 +13,7 @@ void enablePlatformOverrideForDesktop() {
     debugDefaultTargetPlatformOverride = TargetPlatform.fuchsia;
   }
 }
+
 
 class HomePage extends StatefulWidget {
   @override
@@ -40,14 +42,14 @@ class _HomePageState extends State<HomePage> {
 
     childButtons.add(UnicornButton(
         currentButton: FloatingActionButton(
-          heroTag: "airplane",
-          backgroundColor: Colors.greenAccent,
-          mini: true,
-          child: Icon(Icons.airplanemode_active),
-          onPressed: () {
-            Navigator.pushNamed(context, '/TopicDetail');
-          },
-        )));
+      heroTag: "airplane",
+      backgroundColor: Colors.greenAccent,
+      mini: true,
+      child: Icon(Icons.airplanemode_active),
+      onPressed: () {
+        Navigator.pushNamed(context, '/TopicDetail');
+      },
+    )));
 
     childButtons.add(UnicornButton(
         currentButton: FloatingActionButton(
@@ -73,7 +75,7 @@ class _HomePageState extends State<HomePage> {
                 onPressed: () {
                   var route = new MaterialPageRoute(
                     builder: (BuildContext context) =>
-                    new MyStatefulWidget(value: _textController.text),
+                        new Page(value: _textController.text),
                   );
                   Navigator.of(context).push(route);
                 }),
@@ -92,29 +94,25 @@ class _HomePageState extends State<HomePage> {
           Container(
             padding: EdgeInsets.symmetric(vertical: 40.0, horizontal: 10),
             color: Colors.yellowAccent[100],
-            child: Column(
-                children: [
-                  Text(
-                    'Codeforces Round #605 (Div. 3)',
-                    style: TextStyle(
-                      fontSize: 15,
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  Text(
-                    'Technocup 2020 - Elimination Round 4',
-                    style: TextStyle(
-                      fontSize: 15,
-                    ),
-                  ),
-                ]
-            ),
+            child: Column(children: [
+              Text(
+                'Codeforces Round #605 (Div. 3)',
+                style: TextStyle(
+                  fontSize: 15,
+                ),
+              ),
+              const SizedBox(
+                height: 5,
+              ),
+              Text(
+                'Technocup 2020 - Elimination Round 4',
+                style: TextStyle(
+                  fontSize: 15,
+                ),
+              ),
+            ]),
           ),
-
         ],
-
       ),
       floatingActionButton: UnicornDialer(
           parentButtonBackground: Colors.redAccent,
@@ -123,19 +121,52 @@ class _HomePageState extends State<HomePage> {
           childButtons: childButtons),
     );
   }
-  Future<String> getData(String url) async {
-    var response = await http.get(
-        Uri.encodeFull('http://140.136.148.222:8000/api/search/?content=$url'),
-        headers: {
-          "Accept": "application/json"
-        }
+}
+
+class Page extends StatefulWidget{
+  final String value;
+  Page({Key key, @required this.value}) : super(key: key);
+  @override
+  _Page createState() => _Page();
+}
+
+class _Page extends State<Page> {
+
+  @override
+  Widget build(BuildContext context) {
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text("Table Widget"),
+          bottom: TabBar(
+            tabs: <Widget>[
+              Tab(
+                text: "Simple Table",
+              ),
+              Tab(
+                text: "Custom Table",
+              ),
+            ],
+          ),
+        ),
+        body: TabBarView(
+          children: <Widget>[
+            MyStatefulWidget(value:widget.value),
+            BarChartSample1(value:widget.value),
+            //CustomColumnNestedTable(),
+          ],
+        ),
+      ),
     );
-    return response.body;
   }
 }
+
+
 class MyStatefulWidget extends StatefulWidget {
   final String value;
-  MyStatefulWidget({Key key,@required this.value}) : super(key: key);
+
+  MyStatefulWidget({Key key, @required this.value}) : super(key: key);
 
   @override
   _MyStatefulWidgetState createState() => _MyStatefulWidgetState();
@@ -161,6 +192,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   Widget build(BuildContext context) {
     bool toggle = true;
     setData();
+
     return FutureBuilder<String>(
       future: getData(widget.value), // a previously-obtained Future<String> or null
       builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
@@ -268,31 +300,3 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
     return jsonString;
   }
 }
-/*
-class TopicDetail extends StatefulWidget {
-  final String value;
-
-  TopicDetail({Key key, @required this.value}) : super(key: key);
-
-  @override
-  _TopicDetail createState() => _TopicDetail();
-}
-
-class _TopicDetail extends State<TopicDetail> {
-
-  @override
-  Widget build(BuildContext context) {
-    String url = widget.value;
-    bool toggle = true;
-    return new Scaffold(
-      body: buildFutureBuilder(),
-    )
-  }
-
-
-}
-*/
-
-
-
-
