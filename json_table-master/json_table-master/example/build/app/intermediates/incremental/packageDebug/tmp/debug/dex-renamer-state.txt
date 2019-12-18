@@ -1,4 +1,0 @@
-#Sat Dec 14 10:24:29 CST 2019
-base.0=C\:\\Users\\ASUS\\Desktop\\json_table-master\\json_table-master\\example\\build\\app\\intermediates\\transforms\\dexMerger\\debug\\0
-path.0=classes.dex
-renamed.0=classes.dex
