@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/qlist.dart';
+import 'package:flutter_app/result.dart';
 import 'package:flutter_app/topic_page.dart';
 import 'package:flutter_app/home_page.dart';
-import 'package:flutter_app/topic_detail.dart';
+import 'package:flutter_app/search.dart';
 
 void main() => runApp(
     new MaterialApp(
-      debugShowCheckedModeBanner: false, home: HomePage(),
+      debugShowCheckedModeBanner: false, home: HomePage(), //isHome
       initialRoute: '/',
       routes: {
-        '/topic': (context){return Topic();},
-        '/TopicDetail':(context){return TopicDetail();},
+        '/topic': (context){return Topics();},
+        '/qlist': (context){return QuestionList();},
+        '/result': (context){return ShowResult();}
+        //'/TopicDetail':(context){return TopicDetail();},
       },
       title: 'CodeForces',
       theme: ThemeData(
