@@ -8,7 +8,15 @@ class ShowResult extends StatefulWidget {
 }
 
 class _ShowResultState extends State<ShowResult> {
-
+  
+  _launchURL(String str) async {
+    String url = 'https://$str';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
   @override
   Widget build(BuildContext context) {
 
@@ -23,7 +31,7 @@ class _ShowResultState extends State<ShowResult> {
             child: Card(
               child: ListTile(
                 onTap: (){
-
+                  _launchURL(data[index].link);
                 },
                 title: Text(
                     'Problem ID: ${data[index].problem_id}\nName: ${data[index].rname}\nRating: ${(data[index].rrating)}\nTag: ${data[index].rtag}\nLink: ${data[index].link}'),
