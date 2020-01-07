@@ -2,12 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2abea1ec-6c15-444e-9faa-fa3033c7af46" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/assets/BebasNeue-Regular.ttf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/Teko-Bold.ttf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/Teko-Light.ttf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/Teko-Medium.ttf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/Teko-Regular.ttf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/Teko-SemiBold.ttf" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.dart_tool/package_config.json" beforeDir="false" afterPath="$PROJECT_DIR$/.dart_tool/package_config.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.flutter-plugins" beforeDir="false" afterPath="$PROJECT_DIR$/.flutter-plugins" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
