@@ -23,13 +23,24 @@ class _ShowResultState extends State<ShowResult> {
 
     List data = ModalRoute.of(context).settings.arguments;
     return Scaffold(
-      appBar: AppBar(title: Text('Result'),),
+      appBar: AppBar(
+        iconTheme: IconThemeData(color: Colors.black87),
+        backgroundColor: Colors.grey[100],
+        title: Text(
+          'RESULT',
+          style: TextStyle(
+            color: Colors.black87,
+            letterSpacing: 0.5
+          ),
+        ),
+      ),
       body: ListView.builder(
         itemCount: data.length,
         itemBuilder: (context,index){
           return Padding(
-            padding: const EdgeInsets.symmetric(vertical: 1.0, horizontal: 4.0),
+            padding: const EdgeInsets.fromLTRB(10.0, 20.0, 10.0, 0),
             child: Card(
+              color: Colors.amber[300],
               child: ListTile(
                 onTap: (){
                   _launchURL(data[index].link);

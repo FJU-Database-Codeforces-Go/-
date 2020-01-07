@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "C:\\Users\\ASUS\\Desktop\\frontend\\flutter_app\\build\\url_launcher\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-pa\\values-pa.xml",
+            "outputFile": "C:\\Users\\user\\Documents\\GitHub\\frontend\\flutter_app\\build\\url_launcher\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-pa\\values-pa.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\ASUS\\.gradle\\caches\\transforms-1\\files-1.1\\support-compat-28.0.0.aar\\cf219522938e387e36598be918c7c352\\res\\values-pa\\values-pa.xml",
+                    "source": "C:\\Users\\user\\.gradle\\caches\\transforms-1\\files-1.1\\support-compat-28.0.0.aar\\81bcf9a7fa6cfeeb7c44abcfdc197db5\\res\\values-pa\\values-pa.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",
@@ -16,10 +16,10 @@
             ]
         },
         {
-            "outputFile": "C:\\Users\\ASUS\\Desktop\\frontend\\flutter_app\\build\\url_launcher\\intermediates\\res\\merged\\debug\\values-pa\\values-pa.xml",
+            "outputFile": "C:\\Users\\user\\Documents\\GitHub\\frontend\\flutter_app\\build\\url_launcher\\intermediates\\res\\merged\\debug\\values-pa\\values-pa.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\ASUS\\.gradle\\caches\\transforms-1\\files-1.1\\support-compat-28.0.0.aar\\cf219522938e387e36598be918c7c352\\res\\values-pa\\values-pa.xml",
+                    "source": "C:\\Users\\user\\.gradle\\caches\\transforms-1\\files-1.1\\support-compat-28.0.0.aar\\81bcf9a7fa6cfeeb7c44abcfdc197db5\\res\\values-pa\\values-pa.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",

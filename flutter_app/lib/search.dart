@@ -22,10 +22,17 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
     P p = new P(widget.value);
     return new Scaffold(
       appBar: new AppBar(
-        title: new Text('Search result'),
-        backgroundColor: Colors.blueAccent,
+        iconTheme: IconThemeData(color: Colors.black87),
+        title: new Text(
+          'Search result',
+          style: TextStyle(
+            color: Colors.black87
+          )
+        ),
+        backgroundColor: Colors.grey[100],
       ),
-      body: Container(
+      body: Padding(
+        padding: EdgeInsets.fromLTRB(10.0, 20.0, 10.0, 0),
         child: FutureBuilder(
             future: p.getData(),
             builder:(BuildContext context, AsyncSnapshot<List<Listp>> snapshot) {
@@ -51,6 +58,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
                     var id = message[index].id;
 
                     return Card(
+                      color: Colors.amber[300],
                       child: ListTile(
                         title: Text(
                           message[index].name,

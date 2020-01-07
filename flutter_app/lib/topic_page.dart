@@ -34,10 +34,18 @@ class _TopicsState extends State<Topics> {
     }
     return Scaffold(
       appBar: AppBar(
-        title: Text('SELECT TOPICS'),
-        backgroundColor: Colors.blueGrey,
+        iconTheme: IconThemeData(
+          color: Colors.black
+        ),
+        title: Text('SELECT TOPICS',
+          style: TextStyle(
+              color: Colors.black
+          ),
+        ),
+        backgroundColor: Colors.grey[100],
+        elevation: 0,
       ),
-      backgroundColor: Colors.grey[700],
+      backgroundColor: Colors.grey[300],
       body: Padding(
         padding: const EdgeInsets.fromLTRB(30.0, 40.0, 30.0, 0.0),
         child: ListView(
@@ -47,7 +55,8 @@ class _TopicsState extends State<Topics> {
               style: TextStyle(
                   fontSize: 20.0,
                   letterSpacing: 2.0,
-                  color: Colors.amberAccent
+                  color: Colors.grey[900],
+                  fontWeight: FontWeight.bold
               ),
             ),
             SizedBox(height: 5.0),
@@ -90,9 +99,14 @@ class _TopicsState extends State<Topics> {
               ),
             ),
             SizedBox(height: 20.0,),
-            Text('TAGS',
-              style: TextStyle(fontSize: 20.0, color: Colors.amberAccent),
+            Text('TAG',
+              style: TextStyle(
+                  fontSize: 20.0,
+                  color: Colors.grey[900],
+                  fontWeight: FontWeight.bold
+              ),
               textAlign: TextAlign.left,
+
             ),
             SizedBox(height: 10.0,),
             Container(
@@ -144,8 +158,11 @@ class _TopicsState extends State<Topics> {
               ).toList(),
             ),*/
             SizedBox(height: 20.0,),
-            Text('Rating',
-              style: TextStyle(fontSize: 20.0, color: Colors.amberAccent),
+            Text('RATING',
+              style: TextStyle(
+                  fontSize: 20.0,
+                  color: Colors.grey[900],
+                  fontWeight: FontWeight.bold),
               textAlign: TextAlign.left,
             ),
             SizedBox( height:5.0),
@@ -237,9 +254,11 @@ class _TopicsState extends State<Topics> {
       ),
       floatingActionButton: FloatingActionButton(
         elevation: 2.0,
+        backgroundColor: Colors.amber[600],
         child: Text('${data.length}',
         style: TextStyle(
-          fontSize: 20.0
+          fontSize: 20.0,
+          color: Colors.black,
         )),
         onPressed: ()async{
           await Navigator.pushNamed(context, '/qlist',arguments: data);

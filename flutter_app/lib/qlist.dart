@@ -31,34 +31,56 @@ class _QuestionListState extends State<QuestionList> {
   Widget build(BuildContext context) {
     data = ModalRoute.of(context).settings.arguments;
     return Scaffold(
+      backgroundColor: Colors.grey[100],
         appBar: AppBar(
-          title: Text('List of Questions'),
-          automaticallyImplyLeading: false,
-        ),
-        body: ListView.builder(
-        itemCount: data.length,
-        itemBuilder: (context,index){
-          final item = data[index];
-          return Dismissible(
-            key: Key(item.toString()),
-            onDismissed: (direction){
-
-                data.removeAt(index);
-
-            },
-            background: Container(color: Colors.red),
-            child: Card(
-              child: ListTile(
-                onTap: (){},
-                title: Text('Tag: ${reportList[data[index].tag]}\nRating: ${rat[data[index].rating]}'),
-
+          centerTitle: true,
+          backgroundColor: Colors.grey[100],
+          elevation: 1.0,
+          title: Text(
+              'QUESTION LIST',
+                style: TextStyle(
+                color: Colors.black87,
+                letterSpacing: 0.5,
               ),
-            ),
-          );
+          ),
+          automaticallyImplyLeading: false,
+
+        ),
+        body: Padding(
+          padding: const EdgeInsets.fromLTRB(10.0, 30.0, 10.0, 0.0),
+          child: ListView.builder(
+          itemCount: data.length,
+          itemBuilder: (context,index){
+            final item = data[index];
+            return Dismissible(
+              key: Key(item.toString()),
+              onDismissed: (direction){
+
+                  data.removeAt(index);
+
+              },
+              background: Container(color: Colors.red),
+              child: Card(
+                color: Colors.amber[300],
+                elevation: 1.0,
+                child: ListTile(
+                  onTap: (){},
+                  title: Text(
+                    'Tag: ${reportList[data[index].tag]}\nRating: ${rat[data[index].rating]}',
+                    style: TextStyle(
+                      letterSpacing: 0.5,
+                    ),
+                  ),
+
+                ),
+              ),
+            );
       },
     ),
+        ),
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.reply),
+        backgroundColor: Colors.amber,
+        child: Icon(Icons.reply,color: Colors.black87,),
         onPressed:(){
           Navigator.pop(context,data);
         }
